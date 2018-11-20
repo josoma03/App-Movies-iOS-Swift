@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  TestRappi
+
+  Created by Jhonattan Solarte Martinez on 19/11/18.
+  Copyright © 2018 Rappi. All rights reserved.
+*/
+
+"Searching"="Searching";
+"Popular"="Popular";
+"Top_Rated"="Top Rated";
+"Upcoming"="Upcoming";
+"found_no_results" = "There are no results";
+"No_data_was_returned"="No data was returned by the request!";
+"Could_not_parse_the_data"="Could not parse the data as JSON.";
+"Your_request_returned"="Your request returned a status code of: ";
