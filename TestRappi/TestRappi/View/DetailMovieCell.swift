@@ -39,32 +39,31 @@ class DetailMovieCell: UITableViewCell {
         if(objMovie.Idmovie != 0){
             let url = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[0])\(objMovie.Poster_path)")
             self.imgPoster.imageFromUrl((url?.absoluteString)!)
-        
-            lblTitle.text = objMovie.Title
-            lblTagline.text = objMovie.Tagline
-            lblTitle.textColor = Utils.getColorFontBranding()
-        
-            lblStatus.text = objMovie.Status
-            lblReleaseDate.text = Utils.formatDate(objMovie.Release_date)
-            lblOriginalLanguage.text = objMovie.Original_language.uppercased()
-        
-            txtOverview.text = objMovie.Overview
-            txtOverview.setContentOffset(.zero, animated: true)
-            txtOverview.flashScrollIndicators()
-        
-            lblOriginalTitle.text = "\(Utils.stringNamed("original_title")): \(objMovie.Original_title)"
-            lblHomepage.text = "\(Utils.stringNamed("homepage")): \(objMovie.Homepage)"
-            lblSpoken_languages.text = "\(Utils.stringNamed("spoken_languages")): \(objMovie.getSpokenLanguages())"
-            lblGenres.text = "\(Utils.stringNamed("genres")): \(objMovie.getGenres())"
-            lblProductionCountries.text = "\(Utils.stringNamed("Production_countries")): \(objMovie.getProdCountries())"
-        
-        
-            lblBudget.text = "$\(Utils.getFormatFloatingPoint(objMovie.Budget))"
-            lblRevenue.text = "$\(Utils.getFormatFloatingPoint(objMovie.Revenue))"
-            lblPopularity.text = objMovie.Popularity.description
-            lblVoteAverage.text = objMovie.Vote_average.description
-            lblVoteCount.text = Utils.getFormatFloatingPoint(objMovie.Vote_count)
         }
+        lblTitle.text = objMovie.Title
+        lblTagline.text = objMovie.Tagline
+        lblTitle.textColor = Utils.getColorFontBranding()
+        
+        lblStatus.text = objMovie.Status
+        lblReleaseDate.text = Utils.formatDate(objMovie.Release_date)
+        lblOriginalLanguage.text = objMovie.Original_language.uppercased()
+        
+        txtOverview.text = objMovie.Overview
+        txtOverview.setContentOffset(.zero, animated: true)
+        txtOverview.flashScrollIndicators()
+        
+        lblOriginalTitle.text = "\(Utils.stringNamed("original_title")): \(objMovie.Original_title)"
+        lblHomepage.text = "\(Utils.stringNamed("homepage")): \(objMovie.Homepage)"
+        lblSpoken_languages.text = "\(Utils.stringNamed("spoken_languages")): \(objMovie.getSpokenLanguages())"
+        lblGenres.text = "\(Utils.stringNamed("genres")): \(objMovie.getGenres())"
+        lblProductionCountries.text = "\(Utils.stringNamed("Production_countries")): \(objMovie.getProdCountries())"
+        
+        
+        lblBudget.text = "$\(Utils.getFormatFloatingPoint(objMovie.Budget))"
+        lblRevenue.text = "$\(Utils.getFormatFloatingPoint(objMovie.Revenue))"
+        lblPopularity.text = objMovie.Popularity.description
+        lblVoteAverage.text = objMovie.Vote_average.description
+        lblVoteCount.text = Utils.getFormatFloatingPoint(objMovie.Vote_count)
         
     }
     

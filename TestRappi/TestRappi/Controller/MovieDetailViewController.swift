@@ -7,11 +7,13 @@
 //
 
 import UIKit
-class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
+import XCDYouTubeKit
+class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource, VideoDelegate{
  
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableDetail: UITableView!
+    var keyVideo = ""
     var idMovie = 0
     var objMovie = Movie()
     // MARK: - Cicle life
@@ -41,6 +43,12 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
         if(section == 1 && self.objMovie.objBelogns.Name==""){
             return 0
         }
+        else if(section == 2 && self.objMovie.arrProdCompanies.count==0){
+            return 0
+        }
+        else if(section == 3 && self.objMovie.arrVideos.count==0){
+            return 0
+        }
         return 30
     }
     
@@ -64,7 +72,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
         case 2: //production
             return self.objMovie.arrProdCompanies.count
         case 3://videos
-            return 1
+            return self.objMovie.arrVideos.count
         default:
             return 1
         }
@@ -72,6 +80,12 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         if(indexPath.section == 1 && self.objMovie.objBelogns.Name==""){
+            return 0
+        }
+        else if(indexPath.section == 2 && self.objMovie.arrProdCompanies.count==0){
+            return 0
+        }
+        else if(indexPath.section == 3 && self.objMovie.arrVideos.count==0){
             return 0
         }
         return UITableView.automaticDimension
@@ -92,10 +106,17 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
             let cell:ProductionViewCell = self.tableDetail.dequeueReusableCell(withIdentifier: "cellProduction") as! ProductionViewCell
             cell.initWithEntity(objProduction: objMovie.arrProdCompanies[indexPath.row])
             return cell
+        case 3:     //Videos
+            let cell:VideoViewCell = self.tableDetail.dequeueReusableCell(withIdentifier: "cellVideo") as! VideoViewCell
+            cell.objVideo = objMovie.arrVideos[indexPath.row]
+            cell.delegate = self
+            cell.initWithEntity()
+            return cell
         default:
             return UITableViewCell()
         }
     }
+    
     
     
     // MARK: - Other
@@ -114,12 +135,33 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
             self.activityIndicator.isHidden = false
             
             ConnectionManager.sharedInstance.getDetailMovie(idMovie: idMovie) { (success, msg, data) in
+                if(success){
+                    self.objMovie = data
+                    _ = Database.sharedInstance.insertMovie(self.objMovie)
+                    self.searchVideosByMovie()
+                }
+                else{
+                    self.activityIndicator.isHidden = true
+                    self.showToast(message: msg)
+                }
+            }
+        }
+        else{
+            self.showDetailOffline()
+        }
+    }
+
+
+    /// Consulta los videos asociados a una pelicula
+    func searchVideosByMovie()
+    {
+        if Reachability.isConnectedToNetwork(){
+             ConnectionManager.sharedInstance.getVideos(idMovie: idMovie) { (success, msg, data) in
                 DispatchQueue.main.async {
                     self.activityIndicator.isHidden = true
                     
                     if(success){
-                        self.objMovie = data
-                        _ = Database.sharedInstance.insertMovie(self.objMovie)
+                        self.objMovie.arrVideos = data
                         self.showDetail()
                     }
                     else{
@@ -129,17 +171,40 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
             }
         }
         else{
-            self.showToast(message: Utils.stringNamed("Working_offline"))
-            //Obtener los resultados de la base de datos, para mostrarlos en pantalla
-            self.objMovie = Database.sharedInstance.findMovie(SearchType.Movie.byId.Value, arguments: ["Id":self.idMovie])[0]
-            self.showDetail()
+            self.showDetailOffline()
         }
     }
     
+    
+    /// Consulta los datos de la base de datos y se muestran
+    func showDetailOffline()
+    {
+        self.showToast(message: Utils.stringNamed("Working_offline"))
+        //Obtener los resultados de la base de datos, para mostrarlos en pantalla
+        self.objMovie = Database.sharedInstance.findMovie(SearchType.Movie.byId.Value, arguments: ["Id":self.idMovie])[0]
+        self.showDetail()
+    }
+    
+    
+    /// Recarga la tabla con los datos: WS o base de datos
     func showDetail()
     {
         Utils.animateTable(self.tableDetail)
         self.tableDetail.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showVideo"{
+            let destinationController = segue.destination as! ShowVideoViewController
+            destinationController.keyVideo = self.keyVideo
+        }
+    }
+    
+    
+    // MARK: - VideoDelegate
+    func showVideo(_ keyVideo: String) {
+        self.keyVideo = keyVideo
+        self.performSegue(withIdentifier: "showVideo", sender: self)
     }
     
 }

@@ -20,8 +20,8 @@ class ProductionViewCell: UITableViewCell {
         if(objProduction.Name != ""){
             let url = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[0])\(objProduction.Logo_path)")
             self.imgLogo.imageFromUrl((url?.absoluteString)!)
-            lblName.text = objProduction.Name
-            lblOriginCountry.text = objProduction.Origin_country
         }
+        lblName.text = objProduction.Name
+        lblOriginCountry.text = objProduction.Origin_country
     }
 }

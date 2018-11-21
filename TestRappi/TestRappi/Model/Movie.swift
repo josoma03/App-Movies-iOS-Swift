@@ -35,6 +35,7 @@ class Movie: NSObject {
     var arrProdCompanies = [Production_companies]()
     var arrProdCountries = [Production_countries]()
     var arrSpokenLang = [Spoken_languages]()
+    var arrVideos = [VideoMovie]()
     
     override var description: String{
         return "****Movie****\n Idmovie:\t\(Idmovie)\nAdult:\t\(Adult)\nBackdrop_path:\t\(Backdrop_path)\nBudget:\t\(Budget)\nHomepage:\t\(Homepage)\nImdb_id:\t\(Imdb_id)\nOriginal_language:\t\(Original_language)\nOriginal_title:\t\(Original_title)\nOverview:\t\(Overview)\nPopularity:\t\(Popularity)\nPoster_path:\t\(Poster_path)\nRelease_date:\t\(Release_date)\nRevenue:\t\(Revenue)\nRuntime:\t\(Runtime)\nStatus:\t\(Status)\nTagline:\t\(Tagline)\nTitle:\t\(Title)\nVideo:\t\(Video)\nVote_average:\t\(Vote_average)\nVote_count:\t\(Vote_count)\nobjBelogns:\t\(objBelogns)\nobjGenres:\t\(objGenres)\narrProdCompanies:\t\(arrProdCompanies)\narrProdCountries:\t\(arrProdCountries)\narrSpokenLang:\t\(arrSpokenLang)****"

@@ -17,13 +17,11 @@ class BelongViewCell: UITableViewCell {
     
     func initWithEntity(objBelogns: Belongs_to_collection)
     {
+        lblBelongsName.textColor = Utils.getColorFontBranding()
+        lblBelongsName.text = objBelogns.Name
         if(objBelogns.Name != ""){
-            lblBelongsName.textColor = Utils.getColorFontBranding()
-            
             let urlPoster = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[1])\(objBelogns.Poster_path)")
             let urlBackdrop = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[1])\(objBelogns.Backdrop_path)")
-            
-            lblBelongsName.text = objBelogns.Name
             imgBelongs1.imageFromUrl((urlPoster?.absoluteString)!)
             imgBelongs2.imageFromUrl((urlBackdrop?.absoluteString)!)
         }

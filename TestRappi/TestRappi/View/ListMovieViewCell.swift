@@ -20,8 +20,10 @@ class ListMovieViewCell: UITableViewCell {
     
     func initWithEntity(objMovie: Movie)
     {
-        let url = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[0])\(objMovie.Poster_path)")
-        self.imgPoster.imageFromUrl((url?.absoluteString)!)
+        if(objMovie.Idmovie != 0){
+            let url = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[0])\(objMovie.Poster_path)")
+            self.imgPoster.imageFromUrl((url?.absoluteString)!)
+        }
         
         lblOriginalLanguage.text = objMovie.Original_language.uppercased()
         lblVoteCount.text = objMovie.Vote_count.description

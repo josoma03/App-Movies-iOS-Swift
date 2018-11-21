@@ -9,26 +9,47 @@
 import Foundation
 import UIKit
 
+
+protocol VideoDelegate{
+    func showVideo(_ keyVideo: String)
+}
 class VideoViewCell: UITableViewCell {
     
-    @IBOutlet weak var imgPoster: UIImageView!
-    @IBOutlet weak var lblOriginalLanguage: UILabel!
-    @IBOutlet weak var lblVoteCount: UILabel!
-    @IBOutlet weak var imgVoteCount: UIImageView!
-    @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var lblReleaseDate: UILabel!
-    @IBOutlet weak var txtOverview: UITextView!
+    @IBOutlet weak var lblIso_639_1: UILabel!
+    @IBOutlet weak var lblIso_3166_1: UILabel!
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblSite: UILabel!
+    @IBOutlet weak var lblSize: UILabel!
+    @IBOutlet weak var lblType: UILabel!
+    @IBOutlet weak var imgThumbnail: UIImageView!
+    @IBOutlet weak var btnPlay: UIButton!
+    var delegate : VideoDelegate?
+    var objVideo = VideoMovie()
     
-    func initWithEntity(objMovie: Movie)
-    {
-        let url = NSURL(string: "\(Constants.ImageURL)/\(Constants.PosterSizes[0])\(objMovie.Poster_path)")
-        self.imgPoster.imageFromUrl((url?.absoluteString)!)
-        
-        lblOriginalLanguage.text = objMovie.Original_language.uppercased()
-        lblVoteCount.text = objMovie.Vote_count.description
-        lblTitle.text = objMovie.Title
-        lblTitle.textColor = Utils.getColorFontBranding()
-        lblReleaseDate.text = Utils.formatDate(objMovie.Release_date)
-        txtOverview.text = objMovie.Overview
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
+    func initWithEntity()
+    {
+        lblIso_639_1.text = objVideo.Iso_639_1
+        lblIso_3166_1.text = objVideo.Iso_3166_1
+        lblName.text = objVideo.Name
+        lblSite.text = objVideo.Site
+        lblSize.text = objVideo.Size.description
+        lblType.text = objVideo.TypeVideo
+        
+        btnPlay.setTitle(Utils.stringNamed("Play"), for: .normal)
+        btnPlay.backgroundColor = Utils.getColorFontBranding()
+        btnPlay.layer.cornerRadius = 4
+        btnPlay.layer.masksToBounds = true
+    }
+    
+    
+    @IBAction func playVideoAction(_ sender: Any) {
+        self.delegate?.showVideo(objVideo.Key)
+    }
+
 }
+
+

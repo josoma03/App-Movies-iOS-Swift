@@ -12,6 +12,13 @@ import Foundation
 class ConnectionManager: NSObject {
     
     // MARK: WS
+    
+    
+    /// Permite obtener un listado de peliculas dependiendo de la categoria
+    ///
+    /// - Parameters:
+    ///   - idCategory: id de la categoria
+    ///   - onCompleted: Bloque que se ejecuta el terminar la peticion
     func getMovies(idCategory:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [Movie]) -> ()) {
         var path:String = ""
         switch idCategory
@@ -51,6 +58,12 @@ class ConnectionManager: NSObject {
         }
     }
     
+    
+    /// Permite obtener el detalle de una pelicula
+    ///
+    /// - Parameters:
+    ///   - idMovie: id de la pelicula
+    ///   - onCompleted: Bloque que se ejecuta el terminar la peticion
     func getDetailMovie(idMovie:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: Movie) -> ()) {
         var urlString = Constants.ApiURL
         urlString = urlString.replacingOccurrences(of: "{path}", with: Constants.Movies.Details.Path)
@@ -63,6 +76,33 @@ class ConnectionManager: NSObject {
             let dicData: NSDictionary = data as? NSDictionary ?? [:]
             let objMovie = Movie(dic: dicData)
             onCompleted(success, msg, objMovie)
+        }
+    }
+    
+    
+    /// Permite obtener un listado de videos asociados a una pelicula
+    ///
+    /// - Parameters:
+    ///   - idMovie: id de la pelicula
+    ///   - onCompleted: Bloque que se ejecuta el terminar la peticion
+    func getVideos(idMovie:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [VideoMovie]) -> ()) {
+        var urlString = Constants.ApiURL
+        urlString = urlString.replacingOccurrences(of: "{path}", with: Constants.Movies.Videos.Path)
+        urlString = urlString.replacingOccurrences(of: "{id}", with: "\(idMovie)")
+        urlString = urlString.replacingOccurrences(of: "{key}", with: Constants.KeyAPI)
+        
+        let httpMethod:HTTPMethod = .Get
+        
+        NetworkManager.sharedInstance.exec(httpMethod: httpMethod, urlString: urlString, headers: nil, parameters: nil, values: nil, body: nil, isJSON: true) { (success, msg, data) in
+            var arrVideo = [VideoMovie]()
+            let dicData: NSDictionary = data as? NSDictionary ?? [:]
+            let results: NSArray = dicData["results"] as? NSArray ?? []
+            
+            for element in results{
+                arrVideo.append(VideoMovie(dic: element as! NSDictionary))
+            }
+            
+            onCompleted(success, msg, arrVideo)
         }
     }
     

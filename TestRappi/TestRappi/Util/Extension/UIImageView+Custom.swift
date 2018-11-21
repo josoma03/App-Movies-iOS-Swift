@@ -22,7 +22,7 @@ extension UIImageView {
                         self.image = UIImage(data: imageData)
                     }
                 }
-            });
+            }); 
             task.resume()
         }
     }

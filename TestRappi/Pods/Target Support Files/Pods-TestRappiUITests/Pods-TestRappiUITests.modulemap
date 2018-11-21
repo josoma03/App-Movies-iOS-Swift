@@ -1,0 +1,6 @@
+framework module Pods_TestRappiUITests {
+  umbrella header "Pods-TestRappiUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
