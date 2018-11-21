@@ -203,8 +203,13 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
     
     // MARK: - VideoDelegate
     func showVideo(_ keyVideo: String) {
-        self.keyVideo = keyVideo
-        self.performSegue(withIdentifier: "showVideo", sender: self)
+        if Reachability.isConnectedToNetwork(){
+            self.keyVideo = keyVideo
+            self.performSegue(withIdentifier: "showVideo", sender: self)
+        }
+        else{
+            self.showToast(message: Utils.stringNamed("Option_available_only_internet"))
+        }
     }
     
 }

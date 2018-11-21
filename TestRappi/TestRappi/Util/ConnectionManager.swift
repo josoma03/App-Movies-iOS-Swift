@@ -19,24 +19,33 @@ class ConnectionManager: NSObject {
     /// - Parameters:
     ///   - idCategory: id de la categoria
     ///   - onCompleted: Bloque que se ejecuta el terminar la peticion
-    func getMovies(idCategory:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [Movie]) -> ()) {
+    func getMovies(query: String, idCategory:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [Movie]) -> ()) {
+        
         var path:String = ""
-        switch idCategory
-        {
-        case 0:     //Popular
-            path = Constants.Movies.Popular.Path
-            break
-        case 1:     //Top Rated
-            path = Constants.Movies.TopRated.Path
-            break
-        case 2:     //Upcoming
-            path = Constants.Movies.Upcoming.Path
-            break
-        default:     //Popular
-            path = Constants.Movies.Popular.Path
-            break
-        }
         var urlString = Constants.ApiURL
+        if(query == "" || idCategory != -1) //Buscar por categoria
+        {
+            switch idCategory
+            {
+            case 0:     //Popular
+                path = Constants.Movies.Popular.Path
+                break
+            case 1:     //Top Rated
+                path = Constants.Movies.TopRated.Path
+                break
+            case 2:     //Upcoming
+                path = Constants.Movies.Upcoming.Path
+                break
+            default:     //Popular
+                path = Constants.Movies.Popular.Path
+                break
+            }
+        }
+        else{                            //Buscar por texto
+            path = Constants.Movies.Search.Path
+            let queryEncoded = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            urlString = "\(urlString)&query=\(queryEncoded)"
+        }
         urlString = urlString.replacingOccurrences(of: "{path}", with: path)
         urlString = urlString.replacingOccurrences(of: "{key}", with: Constants.KeyAPI)
         

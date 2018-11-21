@@ -34,6 +34,9 @@ struct Constants {
         struct Videos {
             static let Path = "movie/{id}/videos"
         }
+        struct Search {
+            static let Path = "search/movie"
+        }
         
     }
 }

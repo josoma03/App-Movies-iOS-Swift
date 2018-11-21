@@ -21,7 +21,6 @@ class VideoViewCell: UITableViewCell {
     @IBOutlet weak var lblSite: UILabel!
     @IBOutlet weak var lblSize: UILabel!
     @IBOutlet weak var lblType: UILabel!
-    @IBOutlet weak var imgThumbnail: UIImageView!
     @IBOutlet weak var btnPlay: UIButton!
     var delegate : VideoDelegate?
     var objVideo = VideoMovie()
@@ -32,8 +31,8 @@ class VideoViewCell: UITableViewCell {
     }
     func initWithEntity()
     {
-        lblIso_639_1.text = objVideo.Iso_639_1
-        lblIso_3166_1.text = objVideo.Iso_3166_1
+        lblIso_639_1.text = objVideo.Iso_639_1.uppercased()
+        lblIso_3166_1.text = objVideo.Iso_3166_1.uppercased()
         lblName.text = objVideo.Name
         lblSite.text = objVideo.Site
         lblSize.text = objVideo.Size.description
@@ -46,6 +45,9 @@ class VideoViewCell: UITableViewCell {
     }
     
     
+    /// Solicita al controlador del Detalle de la pelicula, abir el video en un nuevo controlador
+    ///
+    /// - Parameter sender: sender
     @IBAction func playVideoAction(_ sender: Any) {
         self.delegate?.showVideo(objVideo.Key)
     }

@@ -8,14 +8,16 @@
 
 import UIKit
 
-class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
+class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource,UISearchBarDelegate {
     
     @IBOutlet weak var iconProfile: UIBarButtonItem!
     @IBOutlet weak var viewNotFound: UIView!
     @IBOutlet weak var lblNotFound: UILabel!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var segmentedCategory: UISegmentedControl!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableListMovies: UITableView!
+    @IBOutlet weak var txtSearchBar: UISearchBar!
+    
     var arrMovies = [Movie]()
     var indexSelected = 0
     var refreshControl: UIRefreshControl!           // varible para la sincronizacion de la tabla
@@ -24,7 +26,7 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initControls()
-        self.searchMovies()
+        self.searchMoviesByCategory()
     }
     
     
@@ -55,23 +57,34 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
         self.performSegue(withIdentifier: "gotoMovieDetail", sender: self)
     }
     
+    // MARK: - UISearchBar
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchMovies(query: self.txtSearchBar.text!, idCategory: -1)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        self.searchMovies(query: self.txtSearchBar.text!, idCategory: -1)
+    }
     
     // MARK: - Other
+
+    
     func initControls()
     {
         //Personalizacion refreshControl
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(self, action: #selector(ListMoviesViewController.searchMovies), for: UIControl.Event.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(ListMoviesViewController.searchMoviesByCategory), for: UIControl.Event.valueChanged)
         let attributes = [NSAttributedString.Key.foregroundColor: Utils.getColorFontBranding()]
         let attributedTitle = NSAttributedString(string: Utils.stringNamed("Searching"), attributes: attributes)
         self.refreshControl.attributedTitle = attributedTitle
         self.tableListMovies.addSubview(refreshControl)
         
-        //Personalizacion segmentedControl
-        self.segmentedControl.setTitle(Utils.stringNamed("Popular"), forSegmentAt: 0)
-        self.segmentedControl.setTitle(Utils.stringNamed("Top_Rated"), forSegmentAt: 1)
-        self.segmentedControl.setTitle(Utils.stringNamed("Upcoming"), forSegmentAt: 2)
-        self.segmentedControl.tintColor = Utils.getColorFontBranding()
+        //Personalizacion segmentedCategory
+        self.segmentedCategory.setTitle(Utils.stringNamed("Popular"), forSegmentAt: 0)
+        self.segmentedCategory.setTitle(Utils.stringNamed("Top_Rated"), forSegmentAt: 1)
+        self.segmentedCategory.setTitle(Utils.stringNamed("Upcoming"), forSegmentAt: 2)
+        self.segmentedCategory.tintColor = Utils.getColorFontBranding()
         
         self.tableListMovies.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -98,28 +111,29 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     ///
     /// - Parameter sender: categoria seleccionada
     @IBAction func categoryChanged(_ sender: Any) {
-        self.searchMovies()
+        self.txtSearchBar.text = ""
+        self.searchMoviesByCategory()
     }
     
+   
     
     /// Permite realizar la busqueda de la peliculas con el WS
-    @objc func searchMovies()
+    @objc func searchMovies(query: String, idCategory: Int)
     {
-        
+        self.view.endEditing(true)
         if Reachability.isConnectedToNetwork(){
             self.activityIndicator.isHidden = false
-            
-            
-            ConnectionManager.sharedInstance.getMovies(idCategory: segmentedControl.selectedSegmentIndex) { (success, msg, arrMovies) in
+            ConnectionManager.sharedInstance.getMovies(query:query, idCategory: idCategory) { (success, msg, arrMovies) in
                 DispatchQueue.main.async {
-                    self.activityIndicator.isHidden = true
-                    
                     if(success){
-                        self.insertAllMoviesDB(arrMovies)
+                        if(idCategory != -1){                   //Solo se guardan cuando se busca por categoria
+                            self.insertAllMoviesDB(arrMovies)
+                        }
                         self.arrMovies = arrMovies
                         self.showResults()
                     }
                     else{
+                        self.activityIndicator.isHidden = true
                         self.showToast(message: msg)
                     }
                 }
@@ -128,7 +142,7 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
         else{
             self.showToast(message: Utils.stringNamed("Working_offline"))
             //Obtener los resultados de la base de datos, para mostrarlos en pantalla
-            self.arrMovies = Database.sharedInstance.findMovie(SearchType.Movie.byCategory.Value, arguments: ["Id":segmentedControl.selectedSegmentIndex])
+            self.arrMovies = Database.sharedInstance.findMovie(SearchType.Movie.byCategory.Value, arguments: ["Id":segmentedCategory.selectedSegmentIndex])
             self.showResults()
         }
     }
@@ -139,11 +153,11 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     /// - Parameter arrMovies: arreglo de peliculas que retorna el WS
     func insertAllMoviesDB(_ arrMovies:[Movie])
     {
-        _ = Database.sharedInstance.deleteCategory_movie(SearchType.Category_movie.byCategory.Value, arguments: ["Id":self.segmentedControl.selectedSegmentIndex])
+        _ = Database.sharedInstance.deleteCategory_movie(SearchType.Category_movie.byCategory.Value, arguments: ["Id":self.segmentedCategory.selectedSegmentIndex])
         for objMovie in arrMovies
         {
             _ = Database.sharedInstance.insertMovie(objMovie)
-            _ = Database.sharedInstance.insertCategory_movie(Category_movie(Idmovie: objMovie.Idmovie, Idcategory: self.segmentedControl.selectedSegmentIndex))
+            _ = Database.sharedInstance.insertCategory_movie(Category_movie(Idmovie: objMovie.Idmovie, Idcategory: self.segmentedCategory.selectedSegmentIndex))
         }
     }
     
@@ -151,6 +165,7 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     func showResults()
     {
         self.refreshControl!.endRefreshing()
+        self.activityIndicator.isHidden = true
         if(self.arrMovies.count == 0)
         {
             self.tableListMovies.isHidden = true
@@ -160,10 +175,14 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
             Utils.animateTable(self.tableListMovies)
             self.tableListMovies.isHidden = false
             self.viewNotFound.isHidden = true
-
         }
     }
     
+    
+    @objc func searchMoviesByCategory()
+    {
+        self.searchMovies(query: "", idCategory: segmentedCategory.selectedSegmentIndex)
+    }
    
 }
 
