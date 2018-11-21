@@ -9,7 +9,7 @@
 import UIKit
 
 class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
-
+    
     @IBOutlet weak var iconProfile: UIBarButtonItem!
     @IBOutlet weak var viewNotFound: UIView!
     @IBOutlet weak var lblNotFound: UILabel!
@@ -26,10 +26,10 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
         self.initControls()
         self.searchMovies()
     }
-
-
+    
+    
     // MARK: - UITableView
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -38,19 +38,14 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
         return self.arrMovies.count
     }
     
-   
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
-        return UITableView.automaticDimension
+        return 150
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:MovieCell = self.tableListMovies.dequeueReusableCell(withIdentifier: "cellMovie") as! MovieCell
-        
+        let cell:ListMovieViewCell = self.tableListMovies.dequeueReusableCell(withIdentifier: "cellMovie") as! ListMovieViewCell
+        cell.initWithEntity(objMovie: arrMovies[indexPath.row])
         return cell
     }
     
@@ -94,7 +89,7 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "gotoMovieDetail"{
             let destinationController = segue.destination as! MovieDetailViewController
-            destinationController.objMovie = arrMovies[indexSelected]
+            destinationController.idMovie = arrMovies[indexSelected].Idmovie
         }
     }
     
@@ -103,56 +98,72 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     ///
     /// - Parameter sender: categoria seleccionada
     @IBAction func categoryChanged(_ sender: Any) {
-        searchMovies()
+        self.searchMovies()
     }
-
+    
     
     /// Permite realizar la busqueda de la peliculas con el WS
     @objc func searchMovies()
     {
-        var path:String = ""
-        self.activityIndicator.isHidden = false
-        switch segmentedControl.selectedSegmentIndex
-        {
-            case 0:     //Popular
-                path = Constants.Movies.Popular.Path
-            break
-            case 1:     //Top Rated
-                path = Constants.Movies.TopRated.Path
-            break
-            case 2:     //Upcoming
-                path = Constants.Movies.Upcoming.Path
-            break
-            default:     //Popular
-                path = Constants.Movies.Popular.Path
-            break
-        }
         
-        ConnectionManager.sharedInstance.getMovies(path: path) { (success, msg, arrMovies) in
-            DispatchQueue.main.async(execute: { () -> Void in
-                self.arrMovies = arrMovies
-                
-                self.activityIndicator.isHidden = true
-                if(self.arrMovies.count == 0)
-                {
-                    self.tableListMovies.isHidden = true
-                    self.viewNotFound.isHidden = false
+        if Reachability.isConnectedToNetwork(){
+            self.activityIndicator.isHidden = false
+            
+            
+            ConnectionManager.sharedInstance.getMovies(idCategory: segmentedControl.selectedSegmentIndex) { (success, msg, arrMovies) in
+                DispatchQueue.main.async {
+                    self.activityIndicator.isHidden = true
                     
                     if(success){
-                        self.lblNotFound.text = Utils.stringNamed("found_no_results")
+                        self.insertAllMoviesDB(arrMovies)
+                        self.arrMovies = arrMovies
+                        self.showResults()
                     }
                     else{
-                        self.lblNotFound.text = msg
+                        self.showToast(message: msg)
                     }
                 }
-                else{
-                    self.tableListMovies.isHidden = false
-                    self.viewNotFound.isHidden = true
-                }
-            })
+            }
         }
-        
-       
+        else{
+            self.showToast(message: Utils.stringNamed("Working_offline"))
+            //Obtener los resultados de la base de datos, para mostrarlos en pantalla
+            self.arrMovies = Database.sharedInstance.findMovie(SearchType.Movie.byCategory.Value, arguments: ["Id":segmentedControl.selectedSegmentIndex])
+            self.showResults()
+        }
     }
+    
+    
+    /// Permite guardar el resultado en la base de datos
+    ///
+    /// - Parameter arrMovies: arreglo de peliculas que retorna el WS
+    func insertAllMoviesDB(_ arrMovies:[Movie])
+    {
+        _ = Database.sharedInstance.deleteCategory_movie(SearchType.Category_movie.byCategory.Value, arguments: ["Id":self.segmentedControl.selectedSegmentIndex])
+        for objMovie in arrMovies
+        {
+            _ = Database.sharedInstance.insertMovie(objMovie)
+            _ = Database.sharedInstance.insertCategory_movie(Category_movie(Idmovie: objMovie.Idmovie, Idcategory: self.segmentedControl.selectedSegmentIndex))
+        }
+    }
+    
+    /// Permite mostrar los resultados
+    func showResults()
+    {
+        self.refreshControl!.endRefreshing()
+        if(self.arrMovies.count == 0)
+        {
+            self.tableListMovies.isHidden = true
+            self.viewNotFound.isHidden = false
+        }
+        else{
+            Utils.animateTable(self.tableListMovies)
+            self.tableListMovies.isHidden = false
+            self.viewNotFound.isHidden = true
+
+        }
+    }
+    
+   
 }
 

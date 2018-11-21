@@ -55,13 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func copyDatabaseIfNeeded() {
         let fileManager = FileManager.default
         guard let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        let finalDatabaseURL = documentsUrl.appendingPathComponent("rappi.db")
+        let finalDatabaseURL = documentsUrl.appendingPathComponent("rappi.sqlite")
         
         do {
             if !fileManager.fileExists(atPath: finalDatabaseURL.path) {
                 print("Rappi - DB does not exist in documents folder")
                 
-                if let dbFilePath = Bundle.main.path(forResource: "rappi", ofType: "db") {
+                if let dbFilePath = Bundle.main.path(forResource: "rappi", ofType: "sqlite") {
                     try fileManager.copyItem(atPath: dbFilePath, toPath: finalDatabaseURL.path)
                 } else {
                     print("Rappi - is not in the app bundle")

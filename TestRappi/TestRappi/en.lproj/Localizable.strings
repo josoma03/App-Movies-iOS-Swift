@@ -14,3 +14,13 @@
 "No_data_was_returned"="No data was returned by the request!";
 "Could_not_parse_the_data"="Could not parse the data as JSON.";
 "Your_request_returned"="Your request returned a status code of: ";
+"Working_offline"="Working offline";
+
+"original_title"="Original title";
+"homepage"="Homepage";
+"spoken_languages"="Spoken languages";
+"genres"="Genres";
+"Collection"="Collection";
+"Production"="Production";
+"Videos"="Videos";
+"Production_countries"="Production countries";

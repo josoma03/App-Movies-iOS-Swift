@@ -13,3 +13,13 @@
 "No_data_was_returned"="¡Ningún dato fue devuelto por la solicitud!";
 "Could_not_parse_the_data"="No se pudieron analizar los datos como JSON.";
 "Your_request_returned"="Su solicitud devolvió un código de estado: ";
+"Working_offline"="Trabajando offline";
+
+"original_title"="Titulo original";
+"homepage"="Página web";
+"spoken_languages"="Lenguajes hablados";
+"genres"="Géneros";
+"Collection"="Colección";
+"Production"="Producción";
+"Videos"="Videos";
+"Production_countries"="Países de producción";
