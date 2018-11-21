@@ -25,3 +25,4 @@
 "Production_countries"="Países de producción";
 "Play"="Reproducir";
 "Option_available_only_internet"="Opción disponible sólo internet";
+"query_must_be_provided"="El campo Query es obligatorio";

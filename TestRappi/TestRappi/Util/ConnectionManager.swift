@@ -19,11 +19,11 @@ class ConnectionManager: NSObject {
     /// - Parameters:
     ///   - idCategory: id de la categoria
     ///   - onCompleted: Bloque que se ejecuta el terminar la peticion
-    func getMovies(query: String, idCategory:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [Movie]) -> ()) {
+    func getMovies(objFilterQuery: FilterQuery, idCategory:Int, onCompleted : @escaping (_ succeeded: Bool, _ msg: String, _ data: [Movie]) -> ()) {
         
         var path:String = ""
         var urlString = Constants.ApiURL
-        if(query == "" || idCategory != -1) //Buscar por categoria
+        if(objFilterQuery.Query == "" || idCategory != -1) //Buscar por categoria
         {
             switch idCategory
             {
@@ -43,8 +43,7 @@ class ConnectionManager: NSObject {
         }
         else{                            //Buscar por texto
             path = Constants.Movies.Search.Path
-            let queryEncoded = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-            urlString = "\(urlString)&query=\(queryEncoded)"
+            urlString = "\(urlString)\(objFilterQuery.getParameters())"
         }
         urlString = urlString.replacingOccurrences(of: "{path}", with: path)
         urlString = urlString.replacingOccurrences(of: "{key}", with: Constants.KeyAPI)

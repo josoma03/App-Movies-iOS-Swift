@@ -45,6 +45,8 @@
 		84D5AB8121A596C70086277D /* NSLayoutConstraint+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5AB8021A596C70086277D /* NSLayoutConstraint+Custom.swift */; };
 		84D5AB8421A59BA80086277D /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5AB8321A59BA80086277D /* Video.swift */; };
 		84D5AB8621A5D6080086277D /* ShowVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5AB8521A5D6080086277D /* ShowVideoViewController.swift */; };
+		84D5AB8821A5F79D0086277D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5AB8721A5F79D0086277D /* FilterViewController.swift */; };
+		84D5AB8A21A600270086277D /* FilterQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D5AB8921A600270086277D /* FilterQuery.swift */; };
 		95A5940CCA758C257487DB6F /* Pods_TestRappiTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A03DB5CE030325CB58C85E5 /* Pods_TestRappiTests.framework */; };
 		C57BA583EF4484AA1BDF3E32 /* Pods_TestRappiUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07FA3878B694FE4AAF66A4AE /* Pods_TestRappiUITests.framework */; };
 /* End PBXBuildFile section */
@@ -122,6 +124,8 @@
 		84D5AB8021A596C70086277D /* NSLayoutConstraint+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Custom.swift"; sourceTree = "<group>"; };
 		84D5AB8321A59BA80086277D /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		84D5AB8521A5D6080086277D /* ShowVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowVideoViewController.swift; sourceTree = "<group>"; };
+		84D5AB8721A5F79D0086277D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		84D5AB8921A600270086277D /* FilterQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterQuery.swift; sourceTree = "<group>"; };
 		8A03DB5CE030325CB58C85E5 /* Pods_TestRappiTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestRappiTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A5ABC4B652722CFBAE61D75 /* Pods-TestRappiUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestRappiUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestRappiUITests/Pods-TestRappiUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F6548AC753568663B0AA9CFA /* Pods-TestRappi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestRappi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestRappi/Pods-TestRappi.debug.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +235,7 @@
 				8467A86E21A26FE2007B1734 /* Database */,
 				8466F54021A382BB00775B2A /* Belongs_to_collection.swift */,
 				8466F55721A4725B00775B2A /* Category_movie.swift */,
+				84D5AB8921A600270086277D /* FilterQuery.swift */,
 				8466F54121A382BB00775B2A /* Genres.swift */,
 				8466F54421A382BC00775B2A /* Movie.swift */,
 				8466F54221A382BC00775B2A /* Production_companies.swift */,
@@ -258,6 +263,7 @@
 		8467A86C21A26FD0007B1734 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				84D5AB8721A5F79D0086277D /* FilterViewController.swift */,
 				8467A83E21A26B33007B1734 /* ListMoviesViewController.swift */,
 				8467A89321A32CED007B1734 /* MovieDetailViewController.swift */,
 				84D5AB8521A5D6080086277D /* ShowVideoViewController.swift */,
@@ -544,6 +550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84D5AB8A21A600270086277D /* FilterQuery.swift in Sources */,
 				8467A89821A345E6007B1734 /* NetworkManager.swift in Sources */,
 				8466F54E21A3DE8800775B2A /* UIViewController+Custom.swift in Sources */,
 				8466F55021A3DEF500775B2A /* Reachability.swift in Sources */,
@@ -560,6 +567,7 @@
 				8466F54921A382BC00775B2A /* Spoken_languages.swift in Sources */,
 				8466F55821A4725B00775B2A /* Category_movie.swift in Sources */,
 				84D5AB8621A5D6080086277D /* ShowVideoViewController.swift in Sources */,
+				84D5AB8821A5F79D0086277D /* FilterViewController.swift in Sources */,
 				8466F55C21A50EF400775B2A /* BelongViewCell.swift in Sources */,
 				8466F54521A382BC00775B2A /* Production_countries.swift in Sources */,
 				8467A87B21A2742A007B1734 /* Database.swift in Sources */,

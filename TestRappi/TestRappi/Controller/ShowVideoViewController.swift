@@ -32,8 +32,18 @@ class ShowVideoViewController:UIViewController
             videoPlayerViewController = XCDYouTubeVideoPlayerViewController(videoIdentifier: keyVideo)
             let defaultCenter = NotificationCenter.default
             defaultCenter.addObserver(self, selector: #selector(self.videoPlayerViewControllerDidReceiveVideo(_:)), name: NSNotification.Name.XCDYouTubeVideoPlayerViewControllerDidReceiveVideo, object: videoPlayerViewController)
+             defaultCenter.addObserver(self, selector: #selector(self.moviePlayerPlaybackDidFinish(_:)), name: .MPMoviePlayerPlaybackDidFinish, object: videoPlayerViewController.moviePlayer)
+
         }
     }
+    
+    @objc func moviePlayerPlaybackDidFinish(_ notification: Notification?) {
+        let error = notification?.userInfo![XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey] as? Error
+        if error != nil {
+            self.showToast(message: (error?.localizedDescription)!)
+        }
+    }
+
  
     @objc func videoPlayerViewControllerDidReceiveVideo(_ notification: Notification?) {
         DispatchQueue.main.async {

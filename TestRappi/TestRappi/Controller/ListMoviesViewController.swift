@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource,UISearchBarDelegate {
+class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource,UISearchBarDelegate, FilterDelegate {
     
     @IBOutlet weak var iconProfile: UIBarButtonItem!
     @IBOutlet weak var viewNotFound: UIView!
@@ -16,7 +16,6 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     @IBOutlet weak var segmentedCategory: UISegmentedControl!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableListMovies: UITableView!
-    @IBOutlet weak var txtSearchBar: UISearchBar!
     
     var arrMovies = [Movie]()
     var indexSelected = 0
@@ -56,16 +55,7 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
         self.indexSelected = indexPath.row
         self.performSegue(withIdentifier: "gotoMovieDetail", sender: self)
     }
-    
-    // MARK: - UISearchBar
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.searchMovies(query: self.txtSearchBar.text!, idCategory: -1)
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        self.searchMovies(query: self.txtSearchBar.text!, idCategory: -1)
-    }
+ 
     
     // MARK: - Other
 
@@ -104,6 +94,10 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
             let destinationController = segue.destination as! MovieDetailViewController
             destinationController.idMovie = arrMovies[indexSelected].Idmovie
         }
+        if segue.identifier == "gotoFilter"{
+            let destinationController = segue.destination as! FilterViewController
+            destinationController.delegate = self
+        }
     }
     
     
@@ -111,19 +105,21 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     ///
     /// - Parameter sender: categoria seleccionada
     @IBAction func categoryChanged(_ sender: Any) {
-        self.txtSearchBar.text = ""
         self.searchMoviesByCategory()
     }
     
-   
+    @IBAction func btnFilterAction(_ sender: Any) {
+        self.performSegue(withIdentifier: "gotoFilter", sender: self)
+    }
+    
     
     /// Permite realizar la busqueda de la peliculas con el WS
-    @objc func searchMovies(query: String, idCategory: Int)
+    @objc func searchMovies(objFilterQuery: FilterQuery, idCategory: Int)
     {
         self.view.endEditing(true)
         if Reachability.isConnectedToNetwork(){
             self.activityIndicator.isHidden = false
-            ConnectionManager.sharedInstance.getMovies(query:query, idCategory: idCategory) { (success, msg, arrMovies) in
+            ConnectionManager.sharedInstance.getMovies(objFilterQuery:objFilterQuery, idCategory: idCategory) { (success, msg, arrMovies) in
                 DispatchQueue.main.async {
                     if(success){
                         if(idCategory != -1){                   //Solo se guardan cuando se busca por categoria
@@ -181,7 +177,12 @@ class ListMoviesViewController: UIViewController, UITableViewDelegate,  UITableV
     
     @objc func searchMoviesByCategory()
     {
-        self.searchMovies(query: "", idCategory: segmentedCategory.selectedSegmentIndex)
+        self.searchMovies(objFilterQuery: FilterQuery(), idCategory: segmentedCategory.selectedSegmentIndex)
+    }
+    
+    // MARK: - FilterDelegate
+    func filterMovies(_ objFilterQuery: FilterQuery) {
+        self.searchMovies(objFilterQuery: objFilterQuery , idCategory: -1)
     }
    
 }
