@@ -104,5 +104,20 @@ class Utils
         }
         return String(format: format,  value)
     }
+    
+    /// Crea animacion de cambio de tamaño
+    ///
+    /// - Parameter label: componenente
+    class func animateLabel(_ label: UIView)
+    {
+        let duration: TimeInterval = 2
+        label.layer.anchorPoint = CGPoint(x: 0, y: 0)
+        label.layer.position = CGPoint(x: 0, y: 0)
+        
+        label.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+        UIView.animate(withDuration: duration) {
+            label.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }
+    }
  
 }

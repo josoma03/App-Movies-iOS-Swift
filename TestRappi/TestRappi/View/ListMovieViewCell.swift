@@ -11,6 +11,7 @@ import UIKit
 class ListMovieViewCell: UITableViewCell {
     
     @IBOutlet weak var imgPoster: UIImageView!
+    @IBOutlet weak var imgAdult: UIImageView!
     @IBOutlet weak var lblOriginalLanguage: UILabel!
     @IBOutlet weak var lblVoteCount: UILabel!
     @IBOutlet weak var imgVoteCount: UIImageView!
@@ -31,5 +32,15 @@ class ListMovieViewCell: UITableViewCell {
         lblTitle.textColor = Utils.getColorFontBranding()
         lblReleaseDate.text = Utils.formatDate(objMovie.Release_date)
         txtOverview.text = objMovie.Overview
+        
+        
+        if(objMovie.Adult == 1)
+        {
+            imgAdult.isHidden = false
+            Utils.animateLabel(imgAdult)
+        }
+        else{
+            imgAdult.isHidden = true
+        }
     }
 }

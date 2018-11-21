@@ -14,6 +14,7 @@ class DetailMovieCell: UITableViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var imgPoster: UIImageView!
     @IBOutlet weak var lblTagline: UILabel!
+    @IBOutlet weak var imgAdult: UIImageView!
     
     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var lblReleaseDate: UILabel!
@@ -64,7 +65,24 @@ class DetailMovieCell: UITableViewCell {
         lblPopularity.text = objMovie.Popularity.description
         lblVoteAverage.text = objMovie.Vote_average.description
         lblVoteCount.text = Utils.getFormatFloatingPoint(objMovie.Vote_count)
+
+        Utils.animateLabel(lblBudget)
+        Utils.animateLabel(lblRevenue)
+        Utils.animateLabel(lblPopularity)
+        Utils.animateLabel(lblVoteAverage)
+        Utils.animateLabel(lblVoteCount)
         
+        if(objMovie.Adult == 1)
+        {
+            imgAdult.isHidden = false
+            Utils.animateLabel(imgAdult)
+        }
+        else{
+            imgAdult.isHidden = true
+        }
     }
+    
+    
+    
     
 }

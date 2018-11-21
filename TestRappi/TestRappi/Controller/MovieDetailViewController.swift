@@ -190,7 +190,6 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate,  UITable
     func showDetail()
     {
         Utils.animateTable(self.tableDetail)
-        self.tableDetail.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
