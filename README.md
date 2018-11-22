@@ -1,3 +1,5 @@
+[](TestRappi.gif)
+
 # Rappi
 Prueba Rappi Desarrollador iOS
 Jhonattan Solarte Martinez
