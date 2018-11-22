@@ -22,6 +22,26 @@ class FilterQuery: NSObject {
         self.PrimaryReleaseYear = ""
     }
     
+    init(IncludeAdult:String, Query:String, Year:String, PrimaryReleaseYear: String){
+        self.IncludeAdult = IncludeAdult
+        self.Query = Query
+        self.Year = Year
+        self.PrimaryReleaseYear = PrimaryReleaseYear
+    }
+    
+    init(IncludeAdult:String, Query:String){
+        self.IncludeAdult = IncludeAdult
+        self.Query = Query
+        self.Year = ""
+        self.PrimaryReleaseYear = ""
+    }
+    init( Query:String){
+        self.IncludeAdult = ""
+        self.Query = Query
+        self.Year = ""
+        self.PrimaryReleaseYear = ""
+    }
+    
     func getParameters()->String
     {
         let queryEncoded = self.Query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
