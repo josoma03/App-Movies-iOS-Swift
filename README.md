@@ -1,4 +1,4 @@
-![testrappi](https://user-images.githubusercontent.com/8276103/48874421-216c0b00-edc1-11e8-8483-2405c02b2fb2.gif)
+
 
 
 # Rappi
@@ -71,3 +71,6 @@ Hace dos semanas inicie con la lectura de un libro que me recomendó un profesor
 
 
 "No es el lenguaje lo que hace parecer simple a un problema, sino que es el desarrollador que hace que el lenguaje parezca simple" - Robert C. Martin
+
+![testrappi](https://user-images.githubusercontent.com/8276103/48874421-216c0b00-edc1-11e8-8483-2405c02b2fb2.gif)
+![2](https://user-images.githubusercontent.com/8276103/48874539-d4d4ff80-edc1-11e8-9339-d44a834cb777.gif)
