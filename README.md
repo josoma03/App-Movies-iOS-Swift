@@ -1,4 +1,5 @@
-[](TestRappi.gif)
+![testrappi](https://user-images.githubusercontent.com/8276103/48874421-216c0b00-edc1-11e8-8483-2405c02b2fb2.gif)
+
 
 # Rappi
 Prueba Rappi Desarrollador iOS
