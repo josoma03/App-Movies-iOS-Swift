@@ -1,9 +1,8 @@
 
 
 
-# Rappi
-Prueba Rappi Desarrollador iOS
-Jhonattan Solarte Martinez
+# Jhonattan Solarte Martinez
+
 
 Este proyecto incluye Strings de internaciónalización (Ingles, Español), splash, iconos, assets, autolayout, y persistencia con sqlite. Se agregó el pod **XCDYouTubeKit** para la visualización de los Vídeos de Youtube asociados a cada pelicula.
 Al realizar las busquedas por categoría, los resultados se guardan en la base de datos. Los cuales se consultan cuando no se dispone de internet.
